@@ -1,15 +1,14 @@
 {
 	interface Stack {
 		readonly size: number;
-		readonly top: number;
 		push(value: string): void;
 		pop(): string;
 		peek(): string;
 	}
 
-	class MyStack implements Stack {
+	class MyArrayStack implements Stack {
 		public size: number;
-		public top: number;
+		private top: number;
 		private stack: string[];
 		constructor() {
 			this.size = 0;
@@ -38,11 +37,11 @@
 		}
 	}
 
-	const stack = new MyStack();
+	const stack = new MyArrayStack();
 	stack.push("wi");
 	stack.push('young');
 	stack.push("min");
 	console.log(`Pop Data : ${stack.pop()}`);
 	console.log(`Peek Data : ${stack.peek()}`);
-	console.log(`Current Stack size : ${stack.size}`);
+	// console.log(`Current Stack size : ${stack.size}`);
 }
