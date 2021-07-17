@@ -1,30 +1,11 @@
 import { throws } from "node:assert";
 
 /**
- * Composition (구성?)
- * = 상속의 문제점을 해결하기 위해서다.
+ * ★★★ Composition & Interface 를 적용했을 때 강력한 파워 ★★★
+ * - 이전에 가져다쓰는 클래스들간에 가장 큰 문제점은 tight 한 coupling 이다.
+ * - 하나의 클래스가 변경되면, 연관된 모든 클래스에 대해서도 업데이트가 되어야하는 참사가 발생한다.
+ * - 고로, 유연하고, 더욱 확장가능한 방법이 Composition & Interface 를 활용한 방법이 있다.
  * 
- * 상속의 문제점은 ?
- * - 상속은 수직적인 관계이다.
- * - 일단, A 라는 부모클래스에 의해, 생성되는 자식클래스들이 많아지면 많아질수록 !
- * - 또, 그 자식클래스로부터 상속받아 생성되는 하위자식클래스들이 많아진다면 ?
- * - 해당 자식클래스의 부모클래스에서 변경이 일어나면, 상속받는 자식클래스들에게도 영향이 간다.
- * - 그리고, 2개 이상의 부모클래스를 상속받는 것은 불가능하다.
- * 
- * ★ Dependency Injection
- * - 클래스에서 필요한 것을, 다른 클래스에서 가져와서 사용한다.
- * 
- * 각각의 클래스에서 필요한 공통된 작업을 매번 작성하는 것이 아니라
- * 외부에서 만들어진 클래스에서 가져와서 사용만 하면된다. (각각의 기능별로)
- * 이것이 "Composition"
- * -> 코드의 "재사용성"이 증가한다.
- * 
- * 결론 : Favor Composition over Inheritance
- * => 상속보다 "컴포지션"을 더 선호해라.
- * 
- * 컴포지션에도 문제점이 있다.
- * -> 클래스들간의 연관성이 높다.
- * = Coupling 이 높다.
  */
 
 {
@@ -89,9 +70,7 @@ import { throws } from "node:assert";
 		}
 	}
 
-	// 싸구려 우유 거품기
-	// -> 실제로 우유 거품을 내는데 복잡한 로직이있다고 가정하자.
-	// -> 결론은 우유 거품이 들어간 커피컵을 준다.
+	
 	class CheapMilkSteamer {
 		private steamMilk() : void {
 			console.log(`Streaming some milk...`);
@@ -105,10 +84,8 @@ import { throws } from "node:assert";
 		}
 	}
 
-	// 설탕 제조기
-	// -> 실제로 설탕을 만드는 과정이 복잡한 로직이 있다고 가정하자.
-	// -> 결론은 설탕을 넣은 커피컵을 준다.
-	class AutomaticSugerMixer {
+	
+	class CandySugerMixer {
 		private getSuger() {
 			console.log("Getting some suger from candy");
 			return true;
@@ -130,12 +107,12 @@ import { throws } from "node:assert";
 	
 		makeCoffee(shots: number): CoffeeCup {
 			const coffee = super.makeCoffee(shots);
-			return this.milkFrother.makeMilk(coffee)	// 외부에서 제공받는 milkFroter 에 coffee 를 넣으면, 우유가 첨가된 커피컵을 반환받는 형태
+			return this.milkFrother.makeMilk(coffee)	
 		}
 	}
 
 	class SweetCoffeeMaker extends CoffeeMachine {
-		constructor(beans: number, private suger: AutomaticSugerMixer) {
+		constructor(beans: number, private suger: CandySugerMixer) {
 			super(beans);
 		}
 
@@ -144,16 +121,9 @@ import { throws } from "node:assert";
 			return this.suger.addSuger(coffee);
 		}
 	}
-	
-	/**
-	 * 현재, CoffeeMachine 라는 부모클래스에 의해 정의된 CaffeLatteMachine, SweetCoffeeMaker 가 있다.
-	 * 근데, 내가 "달달한 카페라테 머신" 객체를 생성하고 싶다 ?
-	 * -> 두 가지 이상의 클래스를 상속받을 수 없기에 에러 !
-	 * 이럴 때 Composition 을 적용한다.
-	 * 필요한 기능을 외부에서 분리해놓은 기능에서 가져다가 사용하는 방식
-	 */
+
 	class SweetCaffeeLatteMachine extends CoffeeMachine {
-		constructor(private beans: number,private milk: CheapMilkSteamer,private suger: AutomaticSugerMixer) {
+		constructor(private beans: number,private milk: CheapMilkSteamer,private suger: CandySugerMixer) {
 			super(beans);
 		}
 		makeCoffee(shots: number): CoffeeCup {
@@ -162,5 +132,13 @@ import { throws } from "node:assert";
 			return this.milk.makeMilk(sugerAddedCoffee);
 		}
 	}
+
+	const CheapMilkMaker = new CheapMilkSteamer();
+	const candySuger = new CandySugerMixer();
+	
+	const sweetMachine = new SweetCoffeeMaker(12, candySuger);
+	const latteMachine = new CaffeLatteMachine(12, "ss", CheapMilkMaker);
+	const sweetLatteMachine = new SweetCaffeeLatteMachine(12, CheapMilkMaker, candySuger);
+	// 이렇게까지만 사용할 경우, 이후 변경사항에 대한 코드 재사용성이 매우 떨어진다.
 
 }
