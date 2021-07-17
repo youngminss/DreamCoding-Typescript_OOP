@@ -6,6 +6,9 @@ import { throws } from "node:assert";
  * - 하나의 클래스가 변경되면, 연관된 모든 클래스에 대해서도 업데이트가 되어야하는 참사가 발생한다.
  * - 고로, 유연하고, 더욱 확장가능한 방법이 Composition & Interface 를 활용한 방법이 있다.
  * 
+ * 클래스들간에 서로 상호작용, 상호대화하는 관계가 성립이 되어 있다면
+ * - 계약서(인터페이스)에 의거해서 서로간의 상호작업해야한다.
+ * => 이것이 Decoupling !
  */
 
 {
@@ -70,8 +73,14 @@ import { throws } from "node:assert";
 		}
 	}
 
+	interface MilkProvider {
+		makeMilk(cup: CoffeeCup): CoffeeCup;
+	}
+	interface SugerProvider {
+		addSuger(cup: CoffeeCup): CoffeeCup;
+	}
 	
-	class CheapMilkSteamer {
+	class CheapMilkSteamer implements MilkProvider {
 		private steamMilk() : void {
 			console.log(`Streaming some milk...`);
 		}
@@ -84,8 +93,33 @@ import { throws } from "node:assert";
 		}
 	}
 
-	
-	class CandySugerMixer {
+	class FancyMilkSteamer implements MilkProvider {
+		private steamMilk() : void {
+			console.log(`Fancy Streaming some milk...`);
+		}
+		makeMilk(cup: CoffeeCup): CoffeeCup {
+			this.steamMilk();
+			return {
+				...cup,
+				hasMilk: true,
+			}
+		}
+	}
+
+	class ColdMilkSteamer implements MilkProvider {
+		private steamMilk() : void {
+			console.log(`Cold Streaming some milk...`);
+		}
+		makeMilk(cup: CoffeeCup): CoffeeCup {
+			this.steamMilk();
+			return {
+				...cup,
+				hasMilk: true,
+			}
+		}
+	}
+
+	class CandySugerMixer implements SugerProvider {
 		private getSuger() {
 			console.log("Getting some suger from candy");
 			return true;
@@ -99,9 +133,25 @@ import { throws } from "node:assert";
 		} 
 	}
 
+	class SugerMixer implements SugerProvider {
+		private getSuger() {
+			console.log("Getting some suger from jar");
+			return true;
+		}
+		addSuger(cup: CoffeeCup): CoffeeCup {
+			const suger = this.getSuger();
+			return {
+				...cup,
+				hasSuger: suger,
+			}
+		} 
+	}
+
+	// 각각에 커피머신에 대해, 설탕이나 우유스팀이 필요한 곳에 생성자에
+	// 캔디부셔서 만든 설탕이나, 싸구려 스팀이 아닌, 설탕과 우유스팀기의 인터페이스를 연결해서 사용
 	class CaffeLatteMachine extends CoffeeMachine {
 		
-		constructor(beans: number, public readonly serialNumber: string, private milkFrother: CheapMilkSteamer) {
+		constructor(beans: number, public readonly serialNumber: string, private milkFrother: MilkProvider) {
 			super(beans);
 		}
 	
@@ -112,7 +162,7 @@ import { throws } from "node:assert";
 	}
 
 	class SweetCoffeeMaker extends CoffeeMachine {
-		constructor(beans: number, private suger: CandySugerMixer) {
+		constructor(beans: number, private suger: SugerProvider) {
 			super(beans);
 		}
 
@@ -123,7 +173,7 @@ import { throws } from "node:assert";
 	}
 
 	class SweetCaffeeLatteMachine extends CoffeeMachine {
-		constructor(private beans: number,private milk: CheapMilkSteamer,private suger: CandySugerMixer) {
+		constructor(private beans: number,private milk: MilkProvider,private suger: CandySugerMixer) {
 			super(beans);
 		}
 		makeCoffee(shots: number): CoffeeCup {
@@ -133,12 +183,24 @@ import { throws } from "node:assert";
 		}
 	}
 
-	const CheapMilkMaker = new CheapMilkSteamer();
-	const candySuger = new CandySugerMixer();
+	// 재료(부품)
+	// 우유
+	const cheapMilkMaker = new CheapMilkSteamer();	// 싸구려 우유스팀생성기
+	const fancyMilkMaker = new FancyMilkSteamer();	// 팬시한 우유스팀생성기
+	const coldMilkMaker = new ColdMilkSteamer();		// 고급 우유스팀생성기
 	
-	const sweetMachine = new SweetCoffeeMaker(12, candySuger);
-	const latteMachine = new CaffeLatteMachine(12, "ss", CheapMilkMaker);
-	const sweetLatteMachine = new SweetCaffeeLatteMachine(12, CheapMilkMaker, candySuger);
-	// 이렇게까지만 사용할 경우, 이후 변경사항에 대한 코드 재사용성이 매우 떨어진다.
+	// 설탕
+	const candySuger = new CandySugerMixer();		// 캔디 쪼개서 만든 설탕
+	const suger = new SugerMixer();							// 리얼 고급 설탕
+	
+	// 머신들
+	// 동일한 커피를 만드는 기계에, "재료만 갈아끼워서 사용가능해졌다."
+	const sweetCandyMachine = new SweetCoffeeMaker(12, candySuger);
+	const sweetMachine = new SweetCoffeeMaker(12, suger);
+
+	const latteMachine = new CaffeLatteMachine(12, "ss", cheapMilkMaker);
+	const coldLatteMachine = new CaffeLatteMachine(12,"SS", coldMilkMaker);
+	const sweetLatteMachine = new SweetCaffeeLatteMachine(12, cheapMilkMaker, candySuger);
+	
 
 }
