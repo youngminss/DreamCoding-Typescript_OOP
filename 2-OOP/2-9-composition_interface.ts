@@ -22,17 +22,13 @@ import { throws } from "node:assert";
 		makeCoffee(shots: number): CoffeeCup;
 	}
 
+	// 오로지, 하나의 공통된 "커.피.머.신" 객체만 필요할 뿐
 	class CoffeeMachine implements CoffeeMaker {
 		private static BEANS_GRAM_PER_SHOT: number = 7;	
 		private coffeeBeans: number = 0;	
 		
-		public constructor(coffeeBeans: number) {
+		public constructor(coffeeBeans: number, private milk: MilkProvider, private suger: SugerProvider) {
 			this.coffeeBeans = coffeeBeans;
-		}
-
-		
-		static makeMachine(coffeeBeans: number): CoffeeMachine {
-			return new CoffeeMachine(coffeeBeans);
 		}
 
 		fillCoffeeBeans(coffeeBeans: number) {
@@ -68,11 +64,13 @@ import { throws } from "node:assert";
 		makeCoffee(shots: number): CoffeeCup {
 			this.grindBeans(shots);	
 			this.preheat();	
-			return this.extract(shots);	
-	
+			const coffee = this.extract(shots);	// 커피머신은 공통적으로 샷을 통해 커피를 내리고
+			const sugerAddedCoffee = this.suger.addSuger(coffee);	// 설탕을 첨가 or 노첨가
+			return this.milk.makeMilk(sugerAddedCoffee);	// 우유를 첨가 or 노첨가한 커피를 반환해주면 된다.
 		}
 	}
 
+	// 부품에 대한 인터페이스
 	interface MilkProvider {
 		makeMilk(cup: CoffeeCup): CoffeeCup;
 	}
@@ -80,6 +78,7 @@ import { throws } from "node:assert";
 		addSuger(cup: CoffeeCup): CoffeeCup;
 	}
 	
+	// 각각의 부품들을 정의한 클래스(인터페이스를 통한)
 	class CheapMilkSteamer implements MilkProvider {
 		private steamMilk() : void {
 			console.log(`Streaming some milk...`);
@@ -119,6 +118,12 @@ import { throws } from "node:assert";
 		}
 	}
 
+	class NoMilk implements MilkProvider {
+			makeMilk(cup: CoffeeCup): CoffeeCup {
+				return cup;
+			}
+	}
+
 	class CandySugerMixer implements SugerProvider {
 		private getSuger() {
 			console.log("Getting some suger from candy");
@@ -147,60 +152,37 @@ import { throws } from "node:assert";
 		} 
 	}
 
-	// 각각에 커피머신에 대해, 설탕이나 우유스팀이 필요한 곳에 생성자에
-	// 캔디부셔서 만든 설탕이나, 싸구려 스팀이 아닌, 설탕과 우유스팀기의 인터페이스를 연결해서 사용
-	class CaffeLatteMachine extends CoffeeMachine {
-		
-		constructor(beans: number, public readonly serialNumber: string, private milkFrother: MilkProvider) {
-			super(beans);
-		}
+	class NoSuger implements SugerProvider {
+			addSuger(cup: CoffeeCup): CoffeeCup {
+				return cup;
+			}
+	}
+
 	
-		makeCoffee(shots: number): CoffeeCup {
-			const coffee = super.makeCoffee(shots);
-			return this.milkFrother.makeMilk(coffee)	
-		}
-	}
-
-	class SweetCoffeeMaker extends CoffeeMachine {
-		constructor(beans: number, private suger: SugerProvider) {
-			super(beans);
-		}
-
-		makeCoffee(shots: number): CoffeeCup {
-			const coffee = super.makeCoffee(shots);
-			return this.suger.addSuger(coffee);
-		}
-	}
-
-	class SweetCaffeeLatteMachine extends CoffeeMachine {
-		constructor(private beans: number,private milk: MilkProvider,private suger: CandySugerMixer) {
-			super(beans);
-		}
-		makeCoffee(shots: number): CoffeeCup {
-			const coffee = super.makeCoffee(shots);
-			const sugerAddedCoffee = this.suger.addSuger(coffee);
-			return this.milk.makeMilk(sugerAddedCoffee);
-		}
-	}
-
 	// 재료(부품)
 	// 우유
 	const cheapMilkMaker = new CheapMilkSteamer();	// 싸구려 우유스팀생성기
 	const fancyMilkMaker = new FancyMilkSteamer();	// 팬시한 우유스팀생성기
 	const coldMilkMaker = new ColdMilkSteamer();		// 고급 우유스팀생성기
+	const noMilk = new NoMilk();
 	
 	// 설탕
 	const candySuger = new CandySugerMixer();		// 캔디 쪼개서 만든 설탕
 	const suger = new SugerMixer();							// 리얼 고급 설탕
-	
+	const noSuger = new NoSuger();
+
 	// 머신들
 	// 동일한 커피를 만드는 기계에, "재료만 갈아끼워서 사용가능해졌다."
-	const sweetCandyMachine = new SweetCoffeeMaker(12, candySuger);
-	const sweetMachine = new SweetCoffeeMaker(12, suger);
+	const sweetCandyMachine = new CoffeeMachine(12,noMilk, candySuger);
+	const sweetMachine = new CoffeeMachine(12,noMilk, suger);
 
-	const latteMachine = new CaffeLatteMachine(12, "ss", cheapMilkMaker);
-	const coldLatteMachine = new CaffeLatteMachine(12,"SS", coldMilkMaker);
-	const sweetLatteMachine = new SweetCaffeeLatteMachine(12, cheapMilkMaker, candySuger);
+	const latteMachine = new CoffeeMachine(12, cheapMilkMaker, noSuger);
+	const coldLatteMachine = new CoffeeMachine(12, coldMilkMaker, noSuger);
+	const sweetLatteMachine = new CoffeeMachine(12, cheapMilkMaker, candySuger);
 	
-
+	/**
+	 * 이것이 진정한, 객체지향 프로그래밍 아니겠는가 ?
+	 * -> "부품"을 통해서, 하나의 "개체"를 생성해서 사용하는 것 !
+	 * 너무 수직적인 상속에 관계에서 벗어나, Decoupling 하는 방법
+	 */
 }
