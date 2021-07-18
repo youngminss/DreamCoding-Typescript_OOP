@@ -20,8 +20,13 @@
 		workPartTime() {};
 	}
 
-	// 
-	function pay(employee: Employee): Employee {
+	// 그냥 제네릭 <T> 만 사용한다면, 말 그대로 Employee 객체타입이 아닐 수 있기 때문에
+	// 그 내부에서 사용하는 함수에 접근이 안되는 것이다.
+	// 고로, 이럴 때, 제네릭에 조금은 제약조건을 건다.
+	// 제네릭 부분에 extends 키워드를 사용한다.
+	// 여기서는 풀타임직원이던, 파트타임직원이던, Employee 라는, 공톤된 인터페이스를 상속한다 라는 의미로 제약조건을 걸었다.
+	// 결과적으로, 인스턴스생성시, 각각의 workFullTime, workPartTime 메소드를 사용할 수 있게 됐다.
+	function pay<T extends Employee>(employee: T): T {
 		employee.pay();
 		return employee;
 	}
