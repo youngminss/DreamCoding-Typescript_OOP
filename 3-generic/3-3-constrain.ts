@@ -49,5 +49,39 @@
 	 * 이럴 때는, 조금은 제약사항이 있어, 좁은 범위에서의 타입을 제네릭에서 사용할 수 있도록 해야한다.
 	 */
 
+	// ===============================================================================================================
+
+	/**
+	 * 추가
+	 */
+	const obj = {
+		name: 'young',
+		age: 20
+	};
+
+	const obj2 = {
+		animal: 'dog'
+	}
+
 	
+	// 함수를 정의한거다. getValue 라는 함수를
+	// 이는, obj 와, key 값을 받아서, 존재하면 해당 obj 에 key 에 해당하는 value 를 반환해주는 함수다.
+	// 어떤 obj 와 key 값이 들어올지 모르니깐, generic 를 사용할 것이다.
+	// 여기서 우리는, 매번 이 함수가 호출될 때, 어떤 obj 인지모르고, 내부에 파라미터로 넘겨져온 key 값 또한
+	// 같이 넘어온 obj 에 존재하는 key 인지 모르니깐, 이것을 보장하도록 제약조건(constrain) 을 걸어준다.
+	// 이 때, "extends keyof" 키워드를  사용한다.
+	// K extends keyof T === T 라는 타입안에, K 라는 키가 존재한다.
+	// 반환 값 또한, 그냥 제네릭 <V> 가 아니라, 앞에서 T 에 속한 K 인지를 확인하는 과정이 있으니
+	// 반환 값은, T[K] 타입이어야 할 것이다. 
+	function getValue<T, K extends keyof T>(obj: T, key: K): T[K] {
+		if(!obj[key]) {
+			throw new Error(`오브젝트에 해당하는 키가 존재하지 않습니다.`)
+		}
+		return obj[key];
+	}
+
+	console.log(getValue(obj, "name"));
+	console.log(getValue(obj, "age"));
+	console.log(getValue(obj2, 'animal'));	
+	// console.log(getValue(obj2, "name"));		// 사전에 실행조차 안댐
 }
