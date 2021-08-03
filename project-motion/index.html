@@ -1,26 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Motion</title>
-	<link rel="stylesheet" href="index.css">
-</head>
-<body>
-	<header class='m-header'>
-		<h1 class="m-header-text">Motion</h1>
-	
-		<div>
-			<button>IMAGE</button>
-			<button>VIDEO</button>
-			<button>NOTE</button>
-			<button>TASK</button>
-		</div>
-	</header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Motion</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <!-- <div class="m-input-window">
+      <div class="m-input-box">
+        <div class="m-input-delete">
+          <img class="m-delete-button" src="./src/assets/images/delete.svg" alt="" />
+        </div>
+        <div class="m-input">
+          <label for="input-title">Title</label>
+          <input type="text" id="input-title" name="input-title" />
+          <label for="url">URL</label>
+          <input type="text" id="url" name="url" />
+        </div>
+        <div class="m-input-add">
+          <button class="m-header-botton">ADD</button>
+        </div>
+      </div>
+    </div> -->
+    <div class="m-input-window">
+      <div class="m-input-box">
+        <div class="m-input-delete">
+          <img class="m-delete-button" src="./src/assets/images/delete.svg" alt="" />
+        </div>
+        <div class="m-input">
+          <label for="input-title">Title</label>
+          <input type="text" id="input-title" name="input-title" />
+          <label for="body">Body</label>
+          <textarea id="body" name="body" rows="5" cols="33"></textarea>
+        </div>
+        <div class="m-input-add">
+          <button class="m-header-botton">ADD</button>
+        </div>
+      </div>
+    </div>
 
-<script src='./dist/console.js'></script>
-</body>
+    <div class="motion">
+      <header class="m-header">
+        <h1 class="m-header-text">MOTION</h1>
 
+        <div class="m-header-bottons">
+          <button class="m-header-botton">IMAGE</button>
+          <button class="m-header-botton">VIDEO</button>
+          <button class="m-header-botton">NOTE</button>
+          <button class="m-header-botton">TASK</button>
+        </div>
+      </header>
 
+      <div class="m-contents">
+        <div class="m-media-content">
+          <iframe
+            class="m-youtube"
+            src="https://www.youtube.com/embed/l1s2Pq1L6Lc"
+            title="한사랑 산악회"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+          <div class="m-media-description">
+            <h1 class="m-main-text">Test Video</h1>
+          </div>
+          <div class="m-delete">
+            <img class="m-delete-button" src="./src/assets/images/delete.svg" alt="" />
+            <!-- <span class="m-delete-button-left">-</span>
+            <span class="m-delete-button-right">-</span> -->
+          </div>
+        </div>
+
+        <div class="m-media-content">
+          <img class="m-image" src="https://picsum.photos/200/300" alt="motion-image" />
+          <div class="m-media-description">
+            <h1 class="m-main-text">Test Image</h1>
+          </div>
+          <div class="m-delete">
+            <img class="m-delete-button" src="./src/assets/images/delete.svg" alt="" />
+            <!-- <span class="m-delete-button-left">-</span>
+            <span class="m-delete-button-right">-</span> -->
+          </div>
+        </div>
+
+        <div class="m-memo-content">
+          <div class="m-description">
+            <h1 class="m-main-text">Tesk Note</h1>
+            <div class="m-note">
+              <p class="m-paragraph">
+                sadsaddsad sadsaddsad sasadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsads
+                addsadsadsaddsadsadsaddsadsadsaddsadvdsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsa
+                dsadsaddsadsadsaddsadaddsadsadsaddsadsadsaddsadsadsaddsadvdsaddsadsadsaddsadsadsaddsadsadsaddsadsa
+                dsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsad
+                addsadsadsaddsadsadsaddsadsadsaddsadvdsaddsadsadsaddsadsadsaddsadsadsaddsadsa
+                dsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsad sadsaddsad sadsaddsad
+                sasadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsads
+                addsadsadsaddsadsadsaddsadsadsaddsadvdsaddsadsadsaddsadsadsaddsadsadsaddsadsa
+                dsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsad
+                addsadsadsaddsadsadsaddsadsadsaddsadvdsaddsadsadsaddsadsadsaddsadsadsaddsadsa
+                dsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsad
+                addsadsadsaddsadsadsaddsadsadsaddsadvdsaddsadsadsaddsadsadsaddsadsadsaddsadsa
+                dsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsad
+              </p>
+            </div>
+          </div>
+
+          <div class="m-delete">
+            <img class="m-delete-button" src="./src/assets/images/delete.svg" alt="" />
+            <!-- <span class="m-delete-button-left">-</span>
+            <span class="m-delete-button-right">-</span> -->
+          </div>
+        </div>
+
+        <div class="m-memo-content">
+          <div class="m-description">
+            <h1 class="m-main-text">Test Task</h1>
+            <div class="m-todo">
+              <div class="m-todo-item">
+                <input type="checkbox" id="할일1" name="할일1" />
+                <label for="할일1">할일1</label>
+              </div>
+              <div class="m-todo-item">
+                <input type="checkbox" id="할일2" name="할일2" /> <label for="할일2">할일2</label>
+              </div>
+              <div class="m-todo-item">
+                <input type="checkbox" id="할일3" name="할일3" /> <label for="할일3">할일3</label>
+              </div>
+              <div class="m-todo-item">
+                <input type="checkbox" id="할일4" name="할일4" /> <label for="할일4">할일1</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="m-delete">
+            <img class="m-delete-button" src="./src/assets/images/delete.svg" alt="" />
+            <!-- <span class="m-delete-button-left">-</span>
+            <span class="m-delete-button-right">-</span> -->
+          </div>
+        </div>
+      </div>
+
+      <footer class="m-footer">
+        <p>Copyright by Youngminss. All rights reserved</p>
+      </footer>
+    </div>
+
+    <script src="./dist/console.js"></script>
+  </body>
 </html>
