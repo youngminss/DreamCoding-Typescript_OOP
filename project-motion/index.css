@@ -89,14 +89,16 @@ body {
   box-shadow: inset 0px 0px 5px white;
 }
 
-.m-media-content {
+.m-contentbox {
   display: flex;
   flex-direction: row;
   width: 95%;
+  min-height: 20%;
   border-radius: 5px;
   margin: 2% auto;
   background: var(--component-bg-gradient);
   box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
 .m-youtube {
@@ -217,7 +219,7 @@ body {
   color: white;
 }
 
-.m-input-media-window {
+.m-input-window {
   visibility: hidden;
   position: absolute;
   display: flex;
@@ -228,22 +230,7 @@ body {
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 3;
 }
-.m-input-media-window.active {
-  visibility: visible;
-}
-
-.m-input-memo-window {
-  visibility: hidden;
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 3;
-}
-.m-input-memo-window.active {
+.m-input-window.active {
   visibility: visible;
 }
 

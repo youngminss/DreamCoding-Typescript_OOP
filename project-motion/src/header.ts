@@ -1,22 +1,22 @@
-type contents = string | null;
+type Contents = string | null;
 
-let currentMakeingContents: contents;
+let currentMakeingContents: Contents;
 const contentsMakerButtons = document.querySelectorAll('.m-header-bottons .m-header-botton');
-const mediaContentModal = document.querySelector('.m-input-media-window');
-const memoContentModal = document.querySelector('.m-input-memo-window');
+const contentModals = document.querySelectorAll('.m-input-window');
 
-function showMemoModal(memo: contents) {
-  memoContentModal?.classList.add('active');
-  currentMakeingContents = memo;
-  console.log(currentMakeingContents);
-}
-function showMediaModal(media: contents) {
-  mediaContentModal?.classList.add('active');
+function showMediaModal(media: Contents) {
+  contentModals[0]?.classList.add('active');
   currentMakeingContents = media;
-  console.log(currentMakeingContents);
+  // console.log(currentMakeingContents);
 }
+function showMemoModal(memo: Contents) {
+  contentModals[1]?.classList.add('active');
+  currentMakeingContents = memo;
+  // console.log(currentMakeingContents);
+}
+
 function showContentModalMaker(this: HTMLElement) {
-  const buttonCotent: contents = this.textContent;
+  const buttonCotent: Contents = this.textContent;
   buttonCotent === 'VIDEO' || buttonCotent === 'IMAGE' ? showMediaModal(buttonCotent) : showMemoModal(buttonCotent);
 }
 

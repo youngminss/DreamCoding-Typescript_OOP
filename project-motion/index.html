@@ -9,7 +9,7 @@
   </head>
 
   <body>
-    <div class="m-input-media-window">
+    <div class="m-input-window">
       <div class="m-input-box">
         <div class="m-input-delete">
           <img class="m-delete-button" src="./src/assets/images/delete.svg" alt="" />
@@ -25,7 +25,7 @@
         </div>
       </div>
     </div>
-    <div class="m-input-memo-window">
+    <div class="m-input-window">
       <div class="m-input-box">
         <div class="m-input-delete">
           <img class="m-delete-button" src="./src/assets/images/delete.svg" alt="" />
@@ -33,8 +33,8 @@
         <div class="m-input">
           <label for="input-memo-title">Title</label>
           <input type="text" id="input-memo-title" name="input-title" />
-          <label for="body">Body</label>
-          <textarea id="body" name="body" rows="5" cols="33"></textarea>
+          <label for="memo">Body</label>
+          <textarea id="memo" name="memo" rows="5" cols="33"></textarea>
         </div>
         <div class="m-input-add">
           <button class="m-header-botton">ADD</button>
@@ -55,7 +55,7 @@
       </header>
 
       <div class="m-contents">
-        <div class="m-media-content">
+        <div class="m-contentbox">
           <iframe
             class="m-youtube"
             src="https://www.youtube.com/embed/l1s2Pq1L6Lc"
@@ -70,8 +70,7 @@
             <img class="m-delete-button" src="./src/assets/images/delete.svg" alt="" />
           </div>
         </div>
-
-        <div class="m-media-content">
+        <div class="m-contentbox">
           <img class="m-image" src="https://picsum.photos/200/300" alt="motion-image" />
           <div class="m-media-description">
             <h1 class="m-main-text">Test Image</h1>
@@ -80,35 +79,18 @@
             <img class="m-delete-button" src="./src/assets/images/delete.svg" alt="" />
           </div>
         </div>
-
-        <div class="m-memo-content">
+        <div class="m-contentbox">
           <div class="m-description">
             <h1 class="m-main-text">Tesk Note</h1>
             <div class="m-note">
-              <p class="m-paragraph">
-                sadsaddsad sadsaddsad sasadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsads
-                addsadsadsaddsadsadsaddsadsadsaddsadvdsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsa
-                dsadsaddsadsadsaddsadaddsadsadsaddsadsadsaddsadsadsaddsadvdsaddsadsadsaddsadsadsaddsadsadsaddsadsa
-                dsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsad
-                addsadsadsaddsadsadsaddsadsadsaddsadvdsaddsadsadsaddsadsadsaddsadsadsaddsadsa
-                dsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsad sadsaddsad sadsaddsad
-                sasadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsads
-                addsadsadsaddsadsadsaddsadsadsaddsadvdsaddsadsadsaddsadsadsaddsadsadsaddsadsa
-                dsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsad
-                addsadsadsaddsadsadsaddsadsadsaddsadvdsaddsadsadsaddsadsadsaddsadsadsaddsadsa
-                dsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsad
-                addsadsadsaddsadsadsaddsadsadsaddsadvdsaddsadsadsaddsadsadsaddsadsadsaddsadsa
-                dsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsadsadsaddsad
-              </p>
+              <p class="m-paragraph">sss</p>
             </div>
           </div>
-
           <div class="m-delete">
             <img class="m-delete-button" src="./src/assets/images/delete.svg" alt="" />
           </div>
         </div>
-
-        <div class="m-memo-content">
+        <div class="m-contentbox">
           <div class="m-description">
             <h1 class="m-main-text">Test Task</h1>
             <div class="m-todo">
@@ -127,7 +109,6 @@
               </div>
             </div>
           </div>
-
           <div class="m-delete">
             <img class="m-delete-button" src="./src/assets/images/delete.svg" alt="" />
           </div>
@@ -142,5 +123,6 @@
     <script src="./dist/console.js"></script>
     <script src="./dist/header.js"></script>
     <script src="./dist/modal.js"></script>
+    <script src="./dist/contents.js"></script>
   </body>
 </html>
