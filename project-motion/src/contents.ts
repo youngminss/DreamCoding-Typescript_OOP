@@ -11,13 +11,15 @@ type Memo = {
 type MotionContents = Media | Memo;
 
 let motionContents: Array<MotionContents> = [];
-const contentsDeleteButton = document.querySelectorAll('.m-delete .m-delete-button');
+let readyToMove: boolean = false;
+let selectedContentIdx: number;
+let lastDragOverContentIdx: number;
 
 function getVideoContent(content: Media): string {
   const { title, url } = { ...content };
   const youtubeToken = url?.includes('=') ? url.split('=')[1] : url?.split('youtu.be/')[1];
   return `
-		<div class="m-contentbox">
+		<div class="m-contentbox" draggable='true'>
 			<iframe
 				class="m-youtube"
 				src="https://www.youtube.com/embed/${youtubeToken}"
@@ -37,7 +39,7 @@ function getVideoContent(content: Media): string {
 function getImageContent(content: Media): string {
   const { title, url } = { ...content };
   return `
-		<div class="m-contentbox">
+		<div class="m-contentbox" draggable='true'>
 			<img class="m-image" src=${url} alt="motion-image" />
 			<div class="m-media-description">
 				<h1 class="m-main-text">${title}</h1>
@@ -51,7 +53,7 @@ function getImageContent(content: Media): string {
 function getNoteContent(content: Memo): string {
   const { title, body } = { ...content };
   return `
-		<div class="m-contentbox">
+		<div class="m-contentbox" draggable='true'>
 			<div class="m-description">
 				<h1 class="m-main-text">${title}</h1>
 				<div class="m-note">
@@ -67,7 +69,7 @@ function getNoteContent(content: Memo): string {
 function getTodoContent(content: Memo): string {
   const { title, body } = { ...content };
   return `
-		<div class="m-contentbox">
+		<div class="m-contentbox" draggable='true'>
 			<div class="m-description">
 				<h1 class="m-main-text">${title}</h1>
 				<div class="m-todo">
@@ -77,8 +79,91 @@ function getTodoContent(content: Memo): string {
 					</div>
 				</div>
 			</div>
+			<div class="m-delete">
+        <img class="m-delete-button" src="./src/assets/images/delete.svg" alt="" />
+      </div>
+		</div>
 	`;
 }
+function enrollDeleteContents() {
+  const contentsDeleteButtons = document.querySelectorAll('.m-contents .m-delete-button');
+  contentsDeleteButtons.forEach((button, idx) => {
+    button.addEventListener('click', function () {
+      motionContents.splice(idx, 1);
+      showMotionContents(motionContents);
+    });
+  });
+}
+
+// function mouseupHandler(this: HTMLElement, e: Event) {
+//   if (readyToMove && this.classList.contains('active')) {
+//     this.classList.remove('active');
+//   }
+//   readyToMove = false;
+// }
+
+// function mouseenterHandler(this: HTMLElement, e: Event) {
+//   // if (readyToMove && !this.classList.contains('active')) {
+//   //   this.classList.add('active');
+//   // }
+// }
+// function mouseleaveHandler(this: HTMLElement, e: Event) {
+//   if (readyToMove && this.classList.contains('active')) {
+//     this.classList.remove('active');
+//   }
+// }
+// function mousemoveHandler(this: HTMLElement, e: Event) {
+//   if (readyToMove && !this.classList.contains('active')) {
+//     this.classList.add('active');
+//   }
+// }
+
+function mousedownHandler(e: Event, idx: number) {
+  readyToMove = true;
+  selectedContentIdx = idx;
+  lastDragOverContentIdx = idx;
+
+  const content = document.querySelectorAll('.m-contentbox')[selectedContentIdx];
+  if (content instanceof HTMLElement) {
+    content.style.opacity = '0.4';
+  }
+}
+function dragstartHandler(this: HTMLElement, e: Event) {}
+function dragendHandler(e: Event, idx: number) {
+  const moveContent: any = motionContents.splice(selectedContentIdx, 1);
+  motionContents.splice(lastDragOverContentIdx, 0, ...moveContent);
+  readyToMove = false;
+
+  showMotionContents(motionContents);
+}
+function dragoverHandler(this: HTMLElement, e: Event) {
+  if (readyToMove && !this.classList.contains('active')) {
+    this.classList.add('active');
+    const contentsBoxs = Array.from(document.querySelectorAll('.m-contentbox'));
+    lastDragOverContentIdx = contentsBoxs.indexOf(this);
+  }
+}
+function dragleaveHandler(this: HTMLElement, e: Event) {
+  if (this.classList.contains('active')) {
+    this.classList.remove('active');
+  }
+}
+
+function enrollMoveMotionContents() {
+  const currentMotionBoxs = document.querySelectorAll('.m-contentbox');
+  currentMotionBoxs.forEach((box, idx) => {
+    // box.addEventListener('mouseup', mouseupHandler);
+    // box.addEventListener('mouseenter', mouseenterHandler);
+    // box.addEventListener('mouseleave', mouseleaveHandler);
+    // box.addEventListener('mousemove', mousemoveHandler);
+    box.addEventListener('mousedown', (e: Event) => mousedownHandler(e, idx), false);
+    box.addEventListener('dragstart', dragstartHandler, false);
+    box.addEventListener('dragend', (e: Event) => dragendHandler(e, idx), false);
+    box.addEventListener('dragover', dragoverHandler, false);
+    box.addEventListener('dragleave', dragleaveHandler, false);
+  });
+}
+
 function showMotionContents(motionContents: Array<MotionContents>) {
   const motionContent = document.querySelector('.m-contents');
   let motionContentItems = motionContents
@@ -96,15 +181,6 @@ function showMotionContents(motionContents: Array<MotionContents>) {
     })
     .join('');
   (motionContent as Element).innerHTML = motionContentItems;
+  enrollDeleteContents();
+  enrollMoveMotionContents();
 }
-
-// function removeContents(this: HTMLElement, idx: number) {
-//   console.log(1);
-// }
-
-// contentsDeleteButton.forEach((button, btnidx) => {
-//   button.addEventListener('click', function () {
-//     const currentContents: Array<object> = [];
-//     console.log(document.querySelectorAll('.m-contentbox'));
-//   });
-// });
