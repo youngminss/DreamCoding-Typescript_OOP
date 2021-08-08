@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -15,5 +18,9 @@
     "eslint-plugin-prettier": "^3.4.0",
     "prettier": "^2.3.2",
     "typescript": "^4.3.5"
-  }
+  },
+  "dependencies": {
+    "gh-pages": "^3.2.3"
+  },
+  "homepage": "https://youngminss.github.io/DreamCoding-Typescript_OOP/"
 }
