@@ -6,13 +6,11 @@ function exitMediaModal() {
     var _a;
     (_a = contentModals[0]) === null || _a === void 0 ? void 0 : _a.classList.remove('active');
     currentMakeingContents = null;
-    // console.log(currentMakeingContents);
 }
 function exitMemoModal() {
     var _a;
     (_a = contentModals[1]) === null || _a === void 0 ? void 0 : _a.classList.remove('active');
     currentMakeingContents = null;
-    // console.log(currentMakeingContents);
 }
 function addMotionContents() {
     if (contentModals[0].classList.contains('active')) {

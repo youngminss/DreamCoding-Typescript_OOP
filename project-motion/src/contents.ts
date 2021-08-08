@@ -85,6 +85,7 @@ function getTodoContent(content: Memo): string {
 		</div>
 	`;
 }
+
 function enrollDeleteContents() {
   const contentsDeleteButtons = document.querySelectorAll('.m-contents .m-delete-button');
   contentsDeleteButtons.forEach((button, idx) => {
@@ -94,29 +95,6 @@ function enrollDeleteContents() {
     });
   });
 }
-
-// function mouseupHandler(this: HTMLElement, e: Event) {
-//   if (readyToMove && this.classList.contains('active')) {
-//     this.classList.remove('active');
-//   }
-//   readyToMove = false;
-// }
-
-// function mouseenterHandler(this: HTMLElement, e: Event) {
-//   // if (readyToMove && !this.classList.contains('active')) {
-//   //   this.classList.add('active');
-//   // }
-// }
-// function mouseleaveHandler(this: HTMLElement, e: Event) {
-//   if (readyToMove && this.classList.contains('active')) {
-//     this.classList.remove('active');
-//   }
-// }
-// function mousemoveHandler(this: HTMLElement, e: Event) {
-//   if (readyToMove && !this.classList.contains('active')) {
-//     this.classList.add('active');
-//   }
-// }
 
 function mousedownHandler(e: Event, idx: number) {
   readyToMove = true;
@@ -152,10 +130,6 @@ function dragleaveHandler(this: HTMLElement, e: Event) {
 function enrollMoveMotionContents() {
   const currentMotionBoxs = document.querySelectorAll('.m-contentbox');
   currentMotionBoxs.forEach((box, idx) => {
-    // box.addEventListener('mouseup', mouseupHandler);
-    // box.addEventListener('mouseenter', mouseenterHandler);
-    // box.addEventListener('mouseleave', mouseleaveHandler);
-    // box.addEventListener('mousemove', mousemoveHandler);
     box.addEventListener('mousedown', (e: Event) => mousedownHandler(e, idx), false);
     box.addEventListener('dragstart', dragstartHandler, false);
     box.addEventListener('dragend', (e: Event) => dragendHandler(e, idx), false);

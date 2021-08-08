@@ -5,13 +5,13 @@ const contentsAddButton = document.querySelectorAll('.m-input-box .m-header-bott
 function exitMediaModal(this: HTMLElement) {
   contentModals[0]?.classList.remove('active');
   currentMakeingContents = null;
-  // console.log(currentMakeingContents);
 }
+
 function exitMemoModal(this: HTMLElement) {
   contentModals[1]?.classList.remove('active');
   currentMakeingContents = null;
-  // console.log(currentMakeingContents);
 }
+
 function addMotionContents(this: HTMLElement) {
   if (contentModals[0].classList.contains('active')) {
     const title = contentModals[0].querySelector('#input-media-title') as HTMLInputElement;
