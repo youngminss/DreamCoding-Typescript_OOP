@@ -19,7 +19,8 @@ li {
 }
 
 p {
-  color: var(--smokywhite);
+  /* color: var(--smokywhite); */
+  color: black;
 }
 
 label {
