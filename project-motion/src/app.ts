@@ -1,3 +1,4 @@
+import { InputDialog } from './components/dialog/dialog.js';
 import { Component } from './components/component.js';
 import { VideoComponent } from './components/page/item/video.js';
 import { TodoComponent } from './components/page/item/todo.js';
@@ -5,7 +6,7 @@ import { NoteComponent } from './components/page/item/note.js';
 import { ImageComponent } from './components/page/item/image.js';
 import { PageComponent } from './components/page/page.js';
 import { Composable } from './components/page/page.js';
-import { PageItemComponent } from './components/page/page';
+import { PageItemComponent } from './components/page/page.js';
 
 class App {
   private readonly page: Component & Composable;
@@ -24,6 +25,20 @@ class App {
 
     const video = new VideoComponent('Video Title', 'https://www.youtube.com/watch?v=h58z5iU8754');
     this.page.addChild(video);
+
+    const imageBtn = document.querySelector('#new-image')! as HTMLButtonElement;
+    imageBtn.addEventListener('click', () => {
+      const dialog = new InputDialog();
+
+      dialog.setOnCloseListener(() => {
+        dialog.removeFrom(document.body);
+      });
+      dialog.setOnSubmitListener(() => {
+        dialog.removeFrom(document.body);
+      });
+
+      dialog.attachTo(document.body);
+    });
   }
 }
 
