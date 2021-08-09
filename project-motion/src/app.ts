@@ -5,11 +5,12 @@ import { NoteComponent } from './components/page/item/note.js';
 import { ImageComponent } from './components/page/item/image.js';
 import { PageComponent } from './components/page/page.js';
 import { Composable } from './components/page/page.js';
+import { PageItemComponent } from './components/page/page';
 
 class App {
   private readonly page: Component & Composable;
   constructor(appRoot: HTMLElement) {
-    this.page = new PageComponent();
+    this.page = new PageComponent(PageItemComponent);
     this.page.attachTo(appRoot);
 
     const image = new ImageComponent('Image Title', 'https://picsum.photos/600/300');
