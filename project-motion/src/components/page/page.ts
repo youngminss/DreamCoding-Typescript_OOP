@@ -12,6 +12,8 @@ interface SectionContainer extends Component, Composable {
   setOnCloseListener(listener: OnCloseListener): void;
   setOnDragStateListener(listener: OnDragStateListener<SectionContainer>): void;
   muteChildren(state: 'mute' | 'unmute'): void;
+  getBoundingRect(): DOMRect;
+  onDropped(): void;
 }
 type SectionContainerConstructor = {
   new (): SectionContainer;
@@ -49,15 +51,22 @@ export class PageItemComponent extends BaseComponent<HTMLElement> implements Sec
   }
   onDragStart(_: DragEvent) {
     this.notifyDragObservers('start');
+    this.element.classList.add('lifted');
   }
   onDragEnd(_: DragEvent) {
     this.notifyDragObservers('stop');
+    this.element.classList.remove('lifted');
   }
   onDragEnter(_: DragEvent) {
     this.notifyDragObservers('enter');
+    this.element.classList.add('drop-area');
   }
   onDragLeave(_: DragEvent) {
     this.notifyDragObservers('leave');
+    this.element.classList.remove('drop-area');
+  }
+  onDropped() {
+    this.element.classList.remove('drop-area');
   }
 
   notifyDragObservers(state: DragState) {
@@ -84,6 +93,10 @@ export class PageItemComponent extends BaseComponent<HTMLElement> implements Sec
       this.element.classList.remove('mute-children');
     }
   }
+
+  getBoundingRect(): DOMRect {
+    return this.element.getBoundingClientRect();
+  }
 }
 export class PageComponent extends BaseComponent<HTMLUListElement> implements Composable {
   private children = new Set<SectionContainer>();
@@ -103,18 +116,19 @@ export class PageComponent extends BaseComponent<HTMLUListElement> implements Co
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
-    console.log('onDragOver');
   }
   onDrop(event: DragEvent) {
     event.preventDefault();
-    console.log('onDrop');
     if (!this.dropTarget) {
       return;
     }
     if (this.dragTarget && this.dragTarget !== this.dropTarget) {
+      const dropY = event.clientY;
+      const srcElement = this.dragTarget.getBoundingRect();
       this.dragTarget.removeFrom(this.element);
-      this.dropTarget.attach(this.dragTarget, 'beforebegin');
+      this.dropTarget.attach(this.dragTarget, dropY < srcElement.y ? 'beforebegin' : 'afterend');
     }
+    this.dropTarget.onDropped();
   }
   addChild(section: Component) {
     const item = new this.pageItemConstructor();
