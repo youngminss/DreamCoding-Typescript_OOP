@@ -15,7 +15,7 @@ export class VideoComponent extends BaseComponent<HTMLElement> {
 						allowfullscreen
 					></iframe>
 				</div>
-				<h3 class="video__title"></h3>
+				<h3 class="page-item__title video__title"></h3>
 		</section>
 		`);
 
